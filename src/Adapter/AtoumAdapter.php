@@ -12,12 +12,15 @@ class AtoumAdapter implements MockEngine
 
     private $mockGenerator;
 
-    public function __construct($className, $config = null)
+    private $constructorArguments;
+
+    public function __construct($className, $config = null, array $constructorArguments = array())
     {
         $mockGenerator = new \mageekguy\atoum\mock\generator;
 
         $this->className = $mockGenerator->getDefaultNamespace().$className;
         $this->config = $config;
+        $this->constructorArguments = $constructorArguments;
 
         $mockNamespacePattern = '/^' . preg_quote($mockGenerator->getDefaultNamespace()) . '\\\/i';
 
@@ -42,7 +45,9 @@ class AtoumAdapter implements MockEngine
             call_user_func($this->config, $this->mockGenerator);
         }
 
-        return new $this->className;
+        $class = new \ReflectionClass($this->className);
+        
+        return $class->newInstanceArgs($this->constructorArguments);
     }
 
     private function hasConfig()

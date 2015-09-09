@@ -45,6 +45,20 @@ $mockGoutte = $this->mocker->mockService(
 );
 ```
 
+Usage with construct argument
+```php
+use Rezzza\MockExtension\Adapter\AtoumAdapter;
+
+$mockGoutte = $this->mocker->mockService(
+    'my.goutte_driver',
+    new AtoumAdapter(
+        '\Behat\Mink\Driver\GoutteDriver',
+        null,
+        array($client)
+    )
+);
+```
+
 Then follow the instructions of your mock engine to use the result
 
 ## Contribute
